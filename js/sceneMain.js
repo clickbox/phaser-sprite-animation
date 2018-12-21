@@ -10,7 +10,7 @@ class SceneMain extends Phaser.Scene {
 
     create() {
         // define our objects
-        this.char = this.add.sprite(game.config.width / 2, game.config.height / 2, "boy");
+        this.char = this.add.sprite(0, game.config.height / 2, "boy");
 
         var frameNames= this.anims.generateFrameNumbers('boy');
 
@@ -23,18 +23,35 @@ class SceneMain extends Phaser.Scene {
 
         this.char.play('walk');
 
+        this.doWalk();
+
+    }
+
+    doWalk() {
+        this.tweens.add({
+            targets: this.char,
+            duration: 5000, 
+            x: game.config.width,
+            y: 0,
+            alpha: 0,
+            onComplete: this.onCompleteHandler,
+            onCompleteParams: [this]
+        });
+    }
+
+    onCompleteHandler(tween, targets, scope) {
+        var char = targets[0];
+        console.log("complete");
+        console.log(targets);
+        char.x = 0;
+        char.y = game.config.height / 2;
+        char.alpha = 1;
+        scope.doWalk();
+
     }
 
     update() {
         // constant running loop
-        this.char.x+=2;
-        if (this.char.x > game.config.width) {
-            this.char.x = 0;
-        }
 
-    }
-
-    customFunctions() {
-        
     }
 }
